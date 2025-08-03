@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-import utils.recipes.img_recize as img_recize
+from utils.recipes.img_recize import img_recize
 
 
 class Category(models.Model):
@@ -39,7 +39,7 @@ class Recipe(models.Model):
             cover_changed = current_cover != self.cover.name
 
         if cover_changed:
-            img_recize.img_recize(self.cover)
+            img_recize(self.cover)
 
     def __str__(self):
         return self.title
