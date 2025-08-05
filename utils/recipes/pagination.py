@@ -29,7 +29,7 @@ def make_pagination_range(page_range, qty_pages, current_page):
         'last_page_out_of_range': stop_range < total_pages,
     }
 
-def make_pagination(request, quetyset, per_page, qty_pages):
+def make_pagination(request, quetyset, per_page, qty_pages=4):
     page_number = int(request.GET.get('page', 1))
     paginator = Paginator(quetyset, per_page)
     page_obj = paginator.get_page(page_number)
