@@ -16,7 +16,7 @@
 
       {% if pages.last_page_out_of_range %}
         <span class="page-item">...</span>
-        <a href="?=page={{ pages.total_pages}}{{ additional_url_query }}" class="page-link page-item">{{ pages.total_pages }}</a>
+        <a href="?page={{ pages.total_pages}}{{ additional_url_query }}" class="page-link page-item">{{ pages.total_pages }}</a>
       {% endif %}
     </div>
   </div>
