@@ -85,3 +85,9 @@ class RecipeModelTest(RecipeTestBase):
             self.recipe.save()
             # Check if img_recize was called
             mock_img_recize.assert_called_once()
+
+    def test_recipe_slug_generate_dont_exist(self):
+        self.recipe.title = 'Test for slug in recipe'
+        self.recipe.slug = ''
+        self.recipe.save()
+        self.assertEqual('test-for-slug-in-recipe', self.recipe.slug)
