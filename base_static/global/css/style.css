@@ -254,10 +254,6 @@ h6 {
 }
 
 .main-footer {
-  /* position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -294,25 +290,23 @@ h6 {
 }
 
 .pagination-content {
-  display:  flex;
+  display: flex;
   flex-flow: row wrap;
   gap: 1rem 0.5rem;
 }
-
 .pagination .page-item {
-  text-decoration: none;
   background: var(--color-gray-3);
   padding: 0.5rem 1rem;
 }
 
-.pagination .page-link{
+.pagination .page-link {
   text-decoration: none;
-  background-color: var(--color-primary);
+  background: var(--color-primary);
   color: var(--color-white);
 }
 
-.pagination .page-current{
-  background-color: var(--color-primary-dark);
+.pagination .page-current {
+  background: var(--color-primary-dark);
 }
 
 /* Forms */
@@ -356,7 +350,7 @@ h6 {
 }
 
 /* Messages */
-.messages-container{
+.messages-container {
   display: flex;
   flex-flow: column nowrap;
   gap: calc(var(--spacing-gutter-medium) / 2);
@@ -388,6 +382,12 @@ h6 {
   color: var(--color-warning-dark);
 }
 
+.message-alert {
+  border: 1px solid var(--color-alert-dark);
+  background: var(--color-alert-light);
+  color: var(--color-alert-dark);
+}
+
 .message-info {
   border: 1px solid var(--color-info-dark);
   background: var(--color-info-light);
@@ -406,7 +406,7 @@ h6 {
   text-align: center;
 }
 
-.m-x{
+.m-x {
   margin: 0 var(--spacing-gutter-medium);
 }
 
