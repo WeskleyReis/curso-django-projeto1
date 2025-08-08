@@ -1,4 +1,6 @@
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
+from django.http import Http404
+
 import math
 
 def make_pagination_range(page_range, qty_pages, current_page):
@@ -32,7 +34,10 @@ def make_pagination_range(page_range, qty_pages, current_page):
 def make_pagination(request, quetyset, per_page, qty_pages=4):
     page_number = int(request.GET.get('page', 1))
     paginator = Paginator(quetyset, per_page)
-    page_obj = paginator.get_page(page_number)
+    try:
+        page_obj = paginator.page(page_number)
+    except EmptyPage:
+        raise Http404()
 
     pagination = make_pagination_range(
         paginator.page_range,

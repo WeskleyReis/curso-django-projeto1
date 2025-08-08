@@ -10,7 +10,7 @@ def strong_password(password):
 
     if not regex.match(password):
         raise ValidationError((
-            'Password must have at least one uppercase latter, '
+            'Password must have at least one uppercase letter, '
             'one lowercase letter and one number. '
             'The length should be at least 8 characters.'
         ),
@@ -23,6 +23,23 @@ class RegisterForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['email'].required = True
         self.fields['password'].validators = [strong_password]
+
+    username = forms.CharField(
+        label='Username*',
+        required=True,
+        help_text='',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Type your username here'
+        }),
+        min_length=4,
+        max_length=150,
+        error_messages={
+            'required': 'This field must not be empty.',
+            'invalid': 'This field is invalid.',
+            'min_length': 'The username must have a minimum of 4 characters.',
+            'max_length': 'The username must have a maximum of 150 characters.',
+        }
+    )
     
     password2 = forms.CharField(
         label='Confirm Password*',
@@ -31,7 +48,7 @@ class RegisterForm(forms.ModelForm):
             'placeholder': 'Repeat your password',
         }),
         error_messages={
-            'required': 'Password must not be empty'
+            'required': 'Password must not be empty.'
         },
     )
 
@@ -45,7 +62,6 @@ class RegisterForm(forms.ModelForm):
             'password',
         )
         labels = {
-            'username': 'Username*',
             'first_name': 'First Name',
             'last_name': 'Last Name',
             'email': 'E-mail*',
@@ -55,12 +71,12 @@ class RegisterForm(forms.ModelForm):
             'username': '',
         }
         error_messages = {
-            'username':{
-                'required': 'This field must not be empty.',
-                'invalid': 'This field is invalid.',
+            'email':{
+                'required':'This field must not be empty.',
             },
             'password':{
-                'max_lenght': 'The password is very short.'
+                'required':'Password must not be empty.',
+                'max_length': 'The password is very short.',
             }
         }
         widgets = {
@@ -70,10 +86,7 @@ class RegisterForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={
                 'placeholder': 'Ex.: Doe',
             }),
-            'username': forms.TextInput(attrs={
-                'placeholder': 'Type your username here',
-            }),
-            'email': forms.TextInput(attrs={
+            'email': forms.EmailInput(attrs={
                 'placeholder': 'Type your e-mail here',
             }),
             'password': forms.PasswordInput(attrs={
@@ -83,23 +96,17 @@ class RegisterForm(forms.ModelForm):
     
     def clean_email(self):
         data = self.cleaned_data.get('email')
-        try:
-            email = User.objects.get(email=data).first().email
-        except:
-            email = None
 
-        if data == email:
-            raise ValidationError(
-                'Email already registered'
-            )
+        if User.objects.filter(email=data).exists():
+            raise ValidationError('Email already registered')
+        
         return data
-    
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        password2 = cleaned_data.get('password2')
+ 
+    def clean_password2(self):
+        password = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password2')
 
-        if password != password2:
-            raise ValidationError({
-                'password2': 'The passwords do not match',
-            })
+        if password and password2 and password != password2:
+            raise ValidationError('The passwords do not match')
+
+        return password2
