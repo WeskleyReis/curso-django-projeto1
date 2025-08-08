@@ -95,12 +95,12 @@ class RegisterForm(forms.ModelForm):
         }
     
     def clean_email(self):
-        data = self.cleaned_data.get('email')
+        email = self.cleaned_data.get('email')
 
-        if User.objects.filter(email=data).exists():
-            raise ValidationError('Email already registered')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('Email already registered', code='invalid')
         
-        return data
+        return email
  
     def clean_password2(self):
         password = self.cleaned_data.get('password')

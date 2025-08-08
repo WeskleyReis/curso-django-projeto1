@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from utils.recipes.img_recize import img_recize
+from utils.img_recize import img_recize
 from django.utils.text import slugify
 
 

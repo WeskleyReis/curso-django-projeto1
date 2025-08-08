@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from utils.recipes.img_recize import img_recize
+from utils.img_recize import img_recize
 from PIL import Image
 import io
 from pathlib import Path

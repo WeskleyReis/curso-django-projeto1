@@ -54,14 +54,14 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
     ])
     def test_fields_cannot_be_empty(self, field, msg):
         self.form_data[field] = ''
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
         self.assertIn(msg, response.content.decode('utf-8'))
         self.assertIn(msg, response.context['form'].errors.get(field))
 
     def test_username_field_min_length_should_be_4(self):
         self.form_data['username'] = 'A' * 3
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
         msg = 'The username must have a minimum of 4 characters.'
@@ -70,7 +70,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
 
     def test_username_field_max_length_should_be_150(self):
         self.form_data['username'] = 'A' * 151
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
         msg = 'The username must have a maximum of 150 characters.'
@@ -79,7 +79,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
 
     def test_password_field_have_lower_upper_case_letters_and_number(self):
         self.form_data['password'] = 'abc123'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
         msg = (
@@ -92,7 +92,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
 
     def test_password_accepts_strong_format(self):
         self.form_data['password'] = 'Abcd1234'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
         msg = (
@@ -106,7 +106,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
     def test_password_and_password_confirmation_are_not_equal(self):
         self.form_data['password'] = 'Abcd1234'
         self.form_data['password2'] = 'Abcd12345'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
         msg = 'The passwords do not match'
@@ -117,7 +117,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
     def test_password_and_password_confirmation_are_equal(self):
         self.form_data['password'] = 'Abcd1234'
         self.form_data['password2'] = 'Abcd1234'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
         msg = 'The passwords do not match'
@@ -134,7 +134,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
             password='Test1234',
         )
         self.form_data['email'] = 'test@test.com'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
 
         msg = 'Email already registered'
@@ -143,6 +143,20 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
         self.assertIn(msg, response.context['form'].errors.get('email'))
 
     def test_send_get_request_to_registration_create_view_returns_404(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+
+    def test_author_created_can_login(self):
+        url = reverse('authors:register_create')
+        self.form_data.update({
+            'username': 'testuser',
+            'password': 'Abcd1234',
+            'password2': 'Abcd1234',
+        })
+        self.client.post(url, data=self.form_data, follow=True)
+        is_authenticated = self.client.login(
+            username='testuser',
+            password='Abcd1234'
+        )
+        self.assertTrue(is_authenticated)

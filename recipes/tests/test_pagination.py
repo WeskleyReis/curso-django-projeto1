@@ -1,7 +1,7 @@
 from django.test import TestCase
 from recipes.models import Recipe
 from django.urls import reverse
-from utils.recipes.pagination import make_pagination_range, make_pagination
+from utils.pagination import make_pagination_range
 
 
 class PaginationTest(TestCase):
