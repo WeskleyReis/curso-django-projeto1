@@ -15,7 +15,7 @@ def home(request):
     page_obj, pagination = make_pagination(request, recipes, PER_PAGE)
     context = {
         'recipes': page_obj,
-        'pages': pagination
+        'pagination_range': pagination
     }
     return render(request, 'recipes/pages/home.html', context)
 
@@ -33,7 +33,7 @@ def category(request, category_id):
     context = {
         'recipes': page_obj,
         'title': f'{recipes[0].category.name} - Category | ',
-        'pages': pagination
+        'pagination_range': pagination
     }
     return render(request, 'recipes/pages/category.html', context)
 
@@ -56,7 +56,7 @@ def search(request):
         'page_title': f'Search for "{search_term}" | ',
         'search_term': search_term,
         'recipes': page_obj,
-        'pages': pagination,
+        'pagination_range': pagination,
         'additional_url_query': f'&q={search_term}',
     }
     return render(request, 'recipes/pages/search.html', context)

@@ -28,7 +28,7 @@ def register_create(request):
         user = form.save(commit=False)
         user.set_password(user.password)
         user.save()
-        messages.success(request, 'Your user is created, please log in')
+        messages.success(request, 'Your user is created, please log in.')
         del(request.session['register_form_data'])
         return redirect(reverse('authors:login'))
 
