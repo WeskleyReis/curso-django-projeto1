@@ -13,7 +13,6 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         self.browser.get(self.live_server_url)
         body = self.browser.find_element(By.TAG_NAME, 'body')
         self.assertIn('No recipes found here 🥲', body.text)
-        self.sleep(3)
     
     @patch('recipes.views.PER_PAGE', new=2)
     def test_recipe_search_input_can_find_correct_recipes(self):
@@ -38,7 +37,6 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         search_input.send_keys(Keys.ENTER)
 
         # The user sees what they were looking for on the page
-        self.sleep()
         self.assertIn(
             title_needed,
             self.browser.find_element(By.CLASS_NAME, 'main-content-list').text,
@@ -64,4 +62,3 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
             len(self.browser.find_elements(By.CLASS_NAME, 'recipe')),
             2
         )
-        self.sleep()
