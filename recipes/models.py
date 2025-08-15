@@ -3,6 +3,7 @@ from django.db import models
 from utils.img_recize import img_recize
 from django.utils.text import slugify
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 
 class Category(models.Model):
@@ -16,13 +17,13 @@ class Category(models.Model):
 
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=65)
-    description = models.CharField(max_length=165)
+    title = models.CharField(max_length=65, verbose_name=_('Title'))
+    description = models.CharField(max_length=165, verbose_name=_('Description'))
     slug = models.SlugField(unique=True, blank=True)
-    preparation_time = models.IntegerField()
-    preparation_time_unit = models.CharField(max_length=65)
-    servings = models.IntegerField()
-    servings_unit = models.CharField(max_length=65)
+    preparation_time = models.IntegerField(verbose_name=_('Preparation Time'))
+    preparation_time_unit = models.CharField(max_length=65, verbose_name=_('Time Unit'))
+    servings = models.IntegerField(verbose_name=_('Servings'))
+    servings_unit = models.CharField(max_length=65, verbose_name=_('Serving Unit'))
     preparation_steps = models.TextField()
     preparation_steps_is_html = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -52,3 +53,7 @@ class Recipe(models.Model):
     
     def get_absolute_url(self):
         return reverse('recipes:recipe', args=(self.id,))
+
+    class Meta:
+        verbose_name = _('Recipe')
+        verbose_name_plural = _('Recipes')
